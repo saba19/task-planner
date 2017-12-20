@@ -1,6 +1,7 @@
 <?php
 
 namespace PlannerBundle\Entity;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,9 +15,9 @@ class Task
 {
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private $users;
+    private $user;
 
     /**
      * @var int
@@ -45,9 +46,15 @@ class Task
      */
     private $date;
 
-    public function __construct()
+    public function __construct(TokenStorageInterface $tokenStorage)
     {
+
         $this->date= new \DateTime();
+        $this->users = $tokenStorage->getToken()->getUser();
+    }
+    public function __toString()
+    {
+        return $this->deadline . "days";
     }
 
 
@@ -131,5 +138,29 @@ class Task
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set users
+     *
+     * @param \PlannerBundle\Entity\User $users
+     *
+     * @return Task
+     */
+    public function setUsers(\PlannerBundle\Entity\User $users = null)
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * Get users
+     *
+     * @return \PlannerBundle\Entity\User
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

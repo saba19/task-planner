@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Tasks list</h1>
 
-    <table>
+    <table width="70%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -11,6 +11,7 @@
                 <th>Deadline</th>
                 <th>Date</th>
                 <th>Actions</th>
+                <th>Created By</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
                 <td>{{ task.todo }}</td>
                 <td>{% if task.deadline %}{{ task.deadline|date('Y-m-d') }}{% endif %}</td>
                 <td>{% if task.date %}{{ task.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ task.users }}</td>
                 <td>
                     <ul>
                         <li>

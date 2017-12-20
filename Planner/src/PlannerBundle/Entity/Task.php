@@ -2,6 +2,7 @@
 
 namespace PlannerBundle\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +15,7 @@ class Task
 {
     /**
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $users;
 
@@ -47,7 +48,13 @@ class Task
 
     public function __construct()
     {
+
         $this->date= new \DateTime();
+
+    }
+    public function __toString()
+    {
+        return $this->deadline . "days";
     }
 
 
@@ -140,7 +147,7 @@ class Task
      *
      * @return Task
      */
-    public function setUsers(\PlannerBundle\Entity\User $users = null)
+    public function setUsers(\PlannerBundle\Entity\User $users)
     {
         $this->users = $users;
 

@@ -23,6 +23,11 @@ class User extends BaseUser
      */
     private $task;
 
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
+
 
 
     public function __construct()

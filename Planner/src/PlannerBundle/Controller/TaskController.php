@@ -1,12 +1,12 @@
 <?php
 
 namespace PlannerBundle\Controller;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 use PlannerBundle\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Task controller.
@@ -40,6 +40,9 @@ class TaskController extends Controller
      */
     public function newAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+
         $task = new Task();
         $form = $this->createForm('PlannerBundle\Form\TaskType', $task);
         $form->handleRequest($request);
@@ -47,6 +50,7 @@ class TaskController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($task);
+            $task->setUsers($user);
             $em->flush();
 
             return $this->redirectToRoute('task_show', array('id' => $task->getId()));
